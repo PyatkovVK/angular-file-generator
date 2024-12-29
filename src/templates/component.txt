@@ -1,0 +1,10 @@
+import { Component } from '@angular/core';
+
+@Component({
+    selector: '<%= selector %>',
+    templateUrl: './<%= fileNameWithPlatform %>.component.html',
+    styleUrls: ['./styles/<%= fileNameWithPlatform %>.component.css']
+})
+export class <%= name %>Component {
+
+}

@@ -1,5 +1,5 @@
-export function convertFileNameUtil(string: string, platform?: string): string {
-    const matchedString: RegExpMatchArray | null  = string.match(/[A-Z][a-z]+/g);
+export function convertFileNameUtil(string: string): string {
+    const matchedString: RegExpMatchArray | null = string.match(/[A-Z][a-z]+/g);
 
     let resultString: string = "";
 
@@ -11,9 +11,7 @@ export function convertFileNameUtil(string: string, platform?: string): string {
         }
 
         resultString += `-${str}`;
-    })
-
-    resultString += `.${platform}`;
+    });
 
     return resultString;
 }
