@@ -5,12 +5,12 @@ export function convertFileNameUtil(string: string): string {
 
     matchedString?.forEach((str: string) => {
         if (!resultString) {
-            resultString = str;
+            resultString = str?.toLowerCase();
 
             return;
         }
 
-        resultString += `-${str}`;
+        resultString += `-${str?.toLowerCase()}`;
     });
 
     return resultString;

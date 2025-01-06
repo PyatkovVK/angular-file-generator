@@ -32,21 +32,25 @@
     "scripts": {
         "npm i": "npm i",
         "vscode:prepublish": "npm run compile",
-        "compile": "tsc -p ./",
+        "compile": "tsc -p ./ && cp -r src/templates out/templates",
         "watch": "tsc -watch -p ./",
         "pretest": "npm run compile && npm run lint",
         "lint": "eslint src",
-        "test": "vscode-test"
+        "test": "vscode-test",
+        "pack:plugin": "vsce package"
     },
     "devDependencies": {
-        "@types/vscode": "^1.96.0",
-        "@types/mocha": "^10.0.10",
+        "@types/mocha": "10.0.10",
         "@types/node": "20.x",
-        "@typescript-eslint/eslint-plugin": "^8.17.0",
-        "@typescript-eslint/parser": "^8.17.0",
-        "eslint": "^9.16.0",
-        "typescript": "^5.7.2",
-        "@vscode/test-cli": "^0.0.10",
-        "@vscode/test-electron": "^2.4.1"
+        "@types/vscode": "1.96.0",
+        "@typescript-eslint/eslint-plugin": "8.17.0",
+        "@typescript-eslint/parser": "8.17.0",
+        "@vscode/test-cli": "0.0.10",
+        "@vscode/test-electron": "2.4.1",
+        "eslint": "9.16.0",
+        "typescript": "5.7.2"
+    },
+    "dependencies": {
+        "vsce": "2.15.0"
     }
 }

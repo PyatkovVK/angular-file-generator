@@ -1,11 +1,12 @@
 import * as vscode from "vscode";
-import * as fs from "fs"
+import * as fs from "fs";
 import * as path from 'path';
 import { Platform } from '../enums/platforms.enum';
 import { generateNameUtil } from '../utils/generateName.util';
 import { convertFileNameUtil } from '../utils/convertFileName.util';
 import { generatePlatformUtil } from '../utils/generatePlatform.util';
 import { convertFileNameWithPlatformUtil } from '../utils/convertFileNameWithPlatform.util';
+import { convertToFolderName } from '../utils/convertFolderName.util';
 
 export async function generateComponent(uri: string): Promise<void> {
     const name: string | undefined = await generateNameUtil();
@@ -24,32 +25,51 @@ export async function generateComponent(uri: string): Promise<void> {
         });
     }
 
-    createComponent(name, uri, platform);
+    createComponent(name, uri, {
+        platform,
+    });
 }
 
-function createComponent(name: string, uri: string, platform?: string): void {
+function createComponent(name: string, uri: string, metadata?: {
+    platform?: string,
+}): void {
+    const folderName: string = convertToFolderName(name);
     const fileName: string = convertFileNameUtil(name);
-    const fileNameWithPlatform: string = convertFileNameWithPlatformUtil(name, platform);
+    const fileNameWithPlatform: string = convertFileNameWithPlatformUtil(name, metadata?.platform);
+    const fileNameWithPlatformToLowerCase: string = convertFileNameWithPlatformUtil(name, metadata?.platform, true);
 
     try {
-        //Создаем ts файл
-        createFileFromTemplate(
-            '../templates/component.txt',
-            uri,
-            {
-                selector: `app-${fileName}`,
-                name: name,
-                fileNameWithPlatform: fileNameWithPlatform,
-            },
-        );
-        //Создаем html
-        fs.writeFile(`${fileNameWithPlatform}.component.html`, '', 'utf-8', (err) => {
+        const urlForNewFiles: string = `${uri}/${folderName}`;
+
+        // Создаем папку для компонента
+        fs.mkdir(urlForNewFiles, (err) => {
         });
-        //Создаем папку стилей и css
-        fs.mkdir('/styles/', (err) => {
+
+        // Создаем html
+        fs.writeFile(`${urlForNewFiles}/${fileNameWithPlatformToLowerCase}.component.html`, '', 'utf-8', (err) => {
         });
-        fs.writeFile(`/styles/${fileNameWithPlatform}.component.scss`, '', 'utf-8', (err) => {
+
+        // Создаем папку стилей и scss
+        fs.mkdir(`${urlForNewFiles}/styles/`, (err) => {
         });
+
+        fs.writeFile(`${urlForNewFiles}/styles/${fileNameWithPlatformToLowerCase}.component.scss`, '', 'utf-8', (err) => {
+            vscode.window.showErrorMessage(JSON.stringify(err));
+        });
+
+        // //Создаем ts файл
+        // createFileFromTemplate(
+        //     '../templates/component.txt',
+        //     urlForNewFiles,
+        //     {
+        //         selector: `app-${fileName}`,
+        //         name: name,
+        //         fileNameWithPlatform: fileNameWithPlatform,
+        //     },
+        // );
+
+        vscode.window.showErrorMessage('Компонента создана');
+        vscode.window.showErrorMessage(uri);
 
     } catch {
         vscode.window.showErrorMessage('Произошла ошибка, компонента не создана');
@@ -75,9 +95,6 @@ function createFileFromTemplate(templatePath: string, outputDir: string, replace
 
         // Получаем путь для сохранения файла
         const outputPath = path.join(outputDir, 'output.txt');
-
-        // Создаём директорию, если она не существует
-        fs.mkdirSync(outputDir, {recursive: true});
 
         // Записываем изменённый файл
         fs.writeFile(outputPath, result, 'utf8', (err) => {

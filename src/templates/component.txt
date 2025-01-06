@@ -3,7 +3,8 @@ import { Component } from '@angular/core';
 @Component({
     selector: '<%= selector %>',
     templateUrl: './<%= fileNameWithPlatform %>.component.html',
-    styleUrls: ['./styles/<%= fileNameWithPlatform %>.component.css']
+    styleUrls: ['./styles/<%= fileNameWithPlatform %>.component.scss'],
+    standalone: true,
 })
 export class <%= name %>Component {
 
