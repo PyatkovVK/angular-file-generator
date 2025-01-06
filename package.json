@@ -1,7 +1,7 @@
 {
     "name": "angFG",
     "displayName": "angular-file-generator",
-    "description": "",
+    "repository": "https://github.com/ChocolateHacker/angular-file-generator",
     "version": "0.0.1",
     "engines": {
         "vscode": "^1.96.0"
@@ -17,14 +17,14 @@
         "commands": [
             {
                 "command": "angFG.generateComponent",
-                "title": "generateComponent"
+                "title": "Generate Angular Component"
             }
         ],
         "menus": {
             "explorer/context": [
                 {
                     "command": "angFG.generateComponent",
-                    "group": "6_copypath@112"
+                    "group": "1_angFG@1"
                 }
             ]
         }

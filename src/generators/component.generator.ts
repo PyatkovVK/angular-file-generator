@@ -3,10 +3,11 @@ import * as fs from "fs";
 import * as path from 'path';
 import { Platform } from '../enums/platforms.enum';
 import { generateNameUtil } from '../utils/generateName.util';
-import { convertFileNameUtil } from '../utils/convertFileName.util';
 import { generatePlatformUtil } from '../utils/generatePlatform.util';
 import { convertFileNameWithPlatformUtil } from '../utils/convertFileNameWithPlatform.util';
 import { convertToFolderName } from '../utils/convertFolderName.util';
+import { convertFileNameUtil } from '../utils/convertFileName.util';
+import { convertToClassName } from '../utils/convertToClassName.util';
 
 export async function generateComponent(uri: string): Promise<void> {
     const name: string | undefined = await generateNameUtil();
@@ -35,74 +36,43 @@ function createComponent(name: string, uri: string, metadata?: {
 }): void {
     const folderName: string = convertToFolderName(name);
     const fileName: string = convertFileNameUtil(name);
-    const fileNameWithPlatform: string = convertFileNameWithPlatformUtil(name, metadata?.platform);
     const fileNameWithPlatformToLowerCase: string = convertFileNameWithPlatformUtil(name, metadata?.platform, true);
+    const className: string = convertToClassName(name, metadata?.platform as Platform);
 
     try {
-        const urlForNewFiles: string = `${uri}/${folderName}`;
+        const urlForNewFiles: string = path.join(uri, folderName);
+        const stylesUrl: string = path.join(urlForNewFiles, 'styles');
+        const scssUrl: string = path.join(stylesUrl, `${fileNameWithPlatformToLowerCase}.component.scss`);
+        const htmlUrl: string = path.join(urlForNewFiles, `${fileNameWithPlatformToLowerCase}.component.html`);
+        const tsUrl: string = path.join(urlForNewFiles, `${fileNameWithPlatformToLowerCase}.component.ts`);
 
         // Создаем папку для компонента
-        fs.mkdir(urlForNewFiles, (err) => {
-        });
-
+        fs.mkdirSync(urlForNewFiles, {recursive: true});
+        // Создаем папку стилей
+        fs.mkdirSync(stylesUrl, {recursive: true});
         // Создаем html
-        fs.writeFile(`${urlForNewFiles}/${fileNameWithPlatformToLowerCase}.component.html`, '', 'utf-8', (err) => {
-        });
-
-        // Создаем папку стилей и scss
-        fs.mkdir(`${urlForNewFiles}/styles/`, (err) => {
-        });
-
-        fs.writeFile(`${urlForNewFiles}/styles/${fileNameWithPlatformToLowerCase}.component.scss`, '', 'utf-8', (err) => {
-            vscode.window.showErrorMessage(JSON.stringify(err));
-        });
-
+        fs.writeFileSync(htmlUrl, '', 'utf-8');
+        // Создаем стили
+        fs.writeFileSync(scssUrl, '', 'utf-8');
         // //Создаем ts файл
-        // createFileFromTemplate(
-        //     '../templates/component.txt',
-        //     urlForNewFiles,
-        //     {
-        //         selector: `app-${fileName}`,
-        //         name: name,
-        //         fileNameWithPlatform: fileNameWithPlatform,
-        //     },
-        // );
+        fs.writeFileSync(
+            tsUrl,
+            `import { Component } from '@angular/core';
 
-        vscode.window.showErrorMessage('Компонента создана');
-        vscode.window.showErrorMessage(uri);
+@Component({
+    selector: 'app-${fileName}',
+    templateUrl: './${fileNameWithPlatformToLowerCase}.component.html',
+    styleUrls: ['./styles/${fileNameWithPlatformToLowerCase}.component.scss'],
+    standalone: true,
+})
+export class ${className}Component {
 
-    } catch {
+}`,
+            'utf-8',
+        );
+
+        vscode.window.showInformationMessage('Компонента создана');
+    } catch (err) {
         vscode.window.showErrorMessage('Произошла ошибка, компонента не создана');
     }
-}
-
-// Функция для чтения шаблона и замены плейсхолдеров
-function createFileFromTemplate(templatePath: string, outputDir: string, replacements: {
-    [key: string]: string
-}): void {
-    fs.readFile(templatePath, 'utf8', (err, data) => {
-        if (err) {
-            console.error('Не найден шаблон:', err);
-            return;
-        }
-
-        let result = data;
-        for (const key in replacements) {
-            const placeholder = `{{${key}}}`;
-            const value = replacements[key];
-            result = result.replace(new RegExp(placeholder, 'g'), value);
-        }
-
-        // Получаем путь для сохранения файла
-        const outputPath = path.join(outputDir, 'output.txt');
-
-        // Записываем изменённый файл
-        fs.writeFile(outputPath, result, 'utf8', (err) => {
-            if (err) {
-                console.error('Error writing file:', err);
-                return;
-            }
-            console.log('File created successfully:', outputPath);
-        });
-    });
 }
