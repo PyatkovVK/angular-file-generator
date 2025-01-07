@@ -2,7 +2,7 @@
     "name": "angFG",
     "displayName": "angular-file-generator",
     "repository": "https://github.com/ChocolateHacker/angular-file-generator",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "engines": {
         "vscode": "^1.96.0"
     },
@@ -10,7 +10,10 @@
         "Other"
     ],
     "activationEvents": [
-        "onCommand:angFG.generateComponent"
+        "onCommand:angFG.generateComponent",
+        "onCommand:angFG.generateModule",
+        "onCommand:angFG.generateService",
+        "onCommand:angFG.generateDirective"
     ],
     "main": "./out/extension.js",
     "contributes": {
@@ -18,6 +21,18 @@
             {
                 "command": "angFG.generateComponent",
                 "title": "Generate Angular Component"
+            },
+            {
+                "command": "angFG.generateModule",
+                "title": "Generate Angular Module"
+            },
+            {
+                "command": "angFG.generateService",
+                "title": "Generate Angular Service"
+            },
+            {
+                "command": "angFG.generateDirective",
+                "title": "Generate Angular Directive"
             }
         ],
         "menus": {
@@ -25,6 +40,18 @@
                 {
                     "command": "angFG.generateComponent",
                     "group": "1_angFG@1"
+                },
+                {
+                    "command": "angFG.generateModule",
+                    "group": "1_angFG@2"
+                },
+                {
+                    "command": "angFG.generateService",
+                    "group": "1_angFG@3"
+                },
+                {
+                    "command": "angFG.generateDirective",
+                    "group": "1_angFG@4"
                 }
             ]
         }
@@ -32,7 +59,7 @@
     "scripts": {
         "npm i": "npm i",
         "vscode:prepublish": "npm run compile",
-        "compile": "tsc -p ./ && cp -r src/templates out/templates",
+        "compile": "tsc -p ./",
         "watch": "tsc -watch -p ./",
         "pretest": "npm run compile && npm run lint",
         "lint": "eslint src",
@@ -45,8 +72,6 @@
         "@types/vscode": "1.96.0",
         "@typescript-eslint/eslint-plugin": "8.17.0",
         "@typescript-eslint/parser": "8.17.0",
-        "@vscode/test-cli": "0.0.10",
-        "@vscode/test-electron": "2.4.1",
         "eslint": "9.16.0",
         "typescript": "5.7.2"
     },
