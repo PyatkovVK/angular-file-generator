@@ -1,8 +1,9 @@
 {
     "name": "angFG",
-    "displayName": "angular-file-generator",
+    "displayName": "Angular File Generator",
+    "description": "Angular file generator for project Program engineering",
     "repository": "https://github.com/ChocolateHacker/angular-file-generator",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "engines": {
         "vscode": "^1.96.0"
     },

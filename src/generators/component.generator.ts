@@ -1,13 +1,9 @@
 import * as vscode from "vscode";
 import * as fs from "fs";
 import * as path from 'path';
-import { Platform } from '../enums/platforms.enum';
 import { generateNameUtil } from '../utils/generateName.util';
-import { generatePlatformUtil } from '../utils/generatePlatform.util';
-import { convertFileNameWithPlatformUtil } from '../utils/convertFileNameWithPlatform.util';
 import { convertToFolderName } from '../utils/convertFolderName.util';
 import { convertFileNameUtil } from '../utils/convertFileName.util';
-import { convertToClassName } from '../utils/convertToClassName.util';
 
 export async function generateComponent(uri: string): Promise<void> {
     const name: string | undefined = await generateNameUtil();
