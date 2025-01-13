@@ -6,6 +6,13 @@
     "engines": {
         "vscode": "^1.96.0"
     },
+    "scripts": {
+        "install_project": "npm i && npm run pack:plugin",
+        "npm i": "npm i",
+        "pack:plugin": "vsce package",
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./"
+    },
     "categories": [
         "Other"
     ],
@@ -55,16 +62,6 @@
                 }
             ]
         }
-    },
-    "scripts": {
-        "npm i": "npm i",
-        "vscode:prepublish": "npm run compile",
-        "compile": "tsc -p ./",
-        "watch": "tsc -watch -p ./",
-        "pretest": "npm run compile && npm run lint",
-        "lint": "eslint src",
-        "test": "vscode-test",
-        "pack:plugin": "vsce package"
     },
     "devDependencies": {
         "@types/mocha": "10.0.10",

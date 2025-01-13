@@ -18,38 +18,21 @@ export async function generateComponent(uri: string): Promise<void> {
         return;
     }
 
-    let platform: string | undefined = await generatePlatformUtil();
-
-    if (platform === Platform.custom) {
-        platform = await vscode.window.showInputBox({
-            placeHolder: 'Введите название вашей платформы',
-        });
-    }
-
-    createComponent(name, uri, {
-        platform,
-    });
+    createComponent(name, uri);
 }
 
-function createComponent(name: string, uri: string, metadata?: {
-    platform?: string,
-}): void {
+function createComponent(name: string, uri: string): void {
     const folderName: string = convertToFolderName(name);
     const fileName: string = convertFileNameUtil(name);
-    const fileNameWithPlatformToLowerCase: string = convertFileNameWithPlatformUtil(name, metadata?.platform, true);
-    const className: string = convertToClassName(name, metadata?.platform as Platform);
 
     try {
         const urlForNewFiles: string = path.join(uri, folderName);
-        const stylesUrl: string = path.join(urlForNewFiles, 'styles');
-        const scssUrl: string = path.join(stylesUrl, `${fileNameWithPlatformToLowerCase}.component.scss`);
-        const htmlUrl: string = path.join(urlForNewFiles, `${fileNameWithPlatformToLowerCase}.component.html`);
-        const tsUrl: string = path.join(urlForNewFiles, `${fileNameWithPlatformToLowerCase}.component.ts`);
+        const scssUrl: string = path.join(urlForNewFiles, `${fileName}.component.scss`);
+        const htmlUrl: string = path.join(urlForNewFiles, `${fileName}.component.html`);
+        const tsUrl: string = path.join(urlForNewFiles, `${fileName}.component.ts`);
 
         // Создаем папку для компонента
         fs.mkdirSync(urlForNewFiles, {recursive: true});
-        // Создаем папку стилей
-        fs.mkdirSync(stylesUrl, {recursive: true});
         // Создаем html
         fs.writeFileSync(htmlUrl, '', 'utf-8');
         // Создаем стили
@@ -61,11 +44,11 @@ function createComponent(name: string, uri: string, metadata?: {
 
 @Component({
     selector: 'app-${fileName}',
-    templateUrl: './${fileNameWithPlatformToLowerCase}.component.html',
-    styleUrls: ['./styles/${fileNameWithPlatformToLowerCase}.component.scss'],
+    templateUrl: './${fileName}.component.html',
+    styleUrls: ['./${fileName}.component.scss'],
     standalone: true,
 })
-export class ${className}Component {
+export class ${name}Component {
 
 }`,
             'utf-8',
