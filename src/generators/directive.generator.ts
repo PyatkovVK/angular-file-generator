@@ -4,6 +4,7 @@ import * as path from 'path';
 import { generateNameUtil } from '../utils/generateName.util';
 import { convertFileNameUtil } from '../utils/convertFileName.util';
 import { customQuestion } from '../utils/customQuestion';
+import { convertClassNameUtil } from '../utils/convertClassName.util';
 
 export async function directiveGenerate(uri: string): Promise<void> {
     const name: string | undefined = await generateNameUtil('директивы');
@@ -15,6 +16,7 @@ export async function directiveGenerate(uri: string): Promise<void> {
     }
 
     const fileName: string = convertFileNameUtil(name);
+    const className: string = convertClassNameUtil(name);
     const tsUrl: string = path.join(uri, `${fileName}.directive.ts`);
 
     const needSelector: string | undefined = await customQuestion('Будет ли селектор?', 'Нет', 'Да');
@@ -31,10 +33,10 @@ export async function directiveGenerate(uri: string): Promise<void> {
             tsUrl,
             `import { Directive } from '@angular/core';
 
-@Directive({
-    ${!selectorName ? '' : `selector: '[${selectorName}]'`}
-})
-export class ${name}Directive {
+@Directive(${!selectorName ? '' : `{
+  selector: '[${selectorName}]'
+`}})
+export class ${className}Directive {
 
 }`,
             'utf-8',

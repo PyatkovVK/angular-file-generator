@@ -4,6 +4,7 @@ import * as path from 'path';
 import { generateNameUtil } from '../utils/generateName.util';
 import { convertToFolderName } from '../utils/convertFolderName.util';
 import { convertFileNameUtil } from '../utils/convertFileName.util';
+import { convertClassNameUtil } from '../utils/convertClassName.util';
 
 export async function generateComponent(uri: string): Promise<void> {
     const name: string | undefined = await generateNameUtil();
@@ -20,6 +21,7 @@ export async function generateComponent(uri: string): Promise<void> {
 function createComponent(name: string, uri: string): void {
     const folderName: string = convertToFolderName(name);
     const fileName: string = convertFileNameUtil(name);
+    const className: string = convertClassNameUtil(name);
 
     try {
         const urlForNewFiles: string = path.join(uri, folderName);
@@ -39,12 +41,12 @@ function createComponent(name: string, uri: string): void {
             `import { Component } from '@angular/core';
 
 @Component({
-    selector: 'app-${fileName}',
-    templateUrl: './${fileName}.component.html',
-    styleUrls: ['./${fileName}.component.scss'],
-    standalone: true,
+  selector: 'app-${fileName}',
+  templateUrl: './${fileName}.component.html',
+  styleUrls: ['./${fileName}.component.scss'],
+  standalone: true,
 })
-export class ${name}Component {
+export class ${className}Component {
 
 }`,
             'utf-8',

@@ -4,6 +4,7 @@ import * as path from 'path';
 import { generateNameUtil } from '../utils/generateName.util';
 import { convertFileNameUtil } from '../utils/convertFileName.util';
 import { customQuestion } from '../utils/customQuestion';
+import { convertClassNameUtil } from '../utils/convertClassName.util';
 
 export async function serviceGenerate(uri: string): Promise<void> {
     const name: string | undefined = await generateNameUtil('сервиса');
@@ -15,6 +16,7 @@ export async function serviceGenerate(uri: string): Promise<void> {
     }
 
     const fileName: string = convertFileNameUtil(name);
+    const className: string = convertClassNameUtil(name);
     const tsUrl: string = path.join(uri, `${fileName}.service.ts`);
 
     const typeService: string | undefined = await customQuestion('Сервис будет корневым?', 'Нет', 'Да');
@@ -26,7 +28,7 @@ export async function serviceGenerate(uri: string): Promise<void> {
             `import { Injectable } from '@angular/core';
 
 @Injectable(${serviceDecoratorOptions})
-export class ${fileName}Service {
+export class ${className}Service {
 
 }`,
             'utf-8',

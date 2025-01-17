@@ -3,6 +3,7 @@ import * as fs from "fs";
 import * as path from 'path';
 import { generateNameUtil } from '../utils/generateName.util';
 import { convertFileNameUtil } from '../utils/convertFileName.util';
+import { convertClassNameUtil } from '../utils/convertClassName.util';
 
 export async function moduleGenerate(uri: string): Promise<void> {
     const name: string | undefined = await generateNameUtil('модуля');
@@ -14,6 +15,7 @@ export async function moduleGenerate(uri: string): Promise<void> {
     }
 
     const fileName: string = convertFileNameUtil(name);
+    const className: string = convertClassNameUtil(name);
     const tsUrl: string = path.join(uri, `${fileName}.module.ts`);
 
     try {
@@ -27,7 +29,7 @@ export async function moduleGenerate(uri: string): Promise<void> {
   exports: [],
   providers: [],
 })
-export class ${name}Module {
+export class ${className}Module {
 
 }`,
             'utf-8',
