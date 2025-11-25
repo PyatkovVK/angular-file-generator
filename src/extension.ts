@@ -7,10 +7,10 @@ import { directiveGenerate } from './generators/directive.generator';
 
 export function activate(context: vscode.ExtensionContext) {
     const generators = [
-        { name: 'angFG.generateComponent', generator: generateComponent },
-        { name: 'angFG.generateModule', generator: moduleGenerate },
-        { name: 'angFG.generateService', generator: serviceGenerate },
-        { name: 'angFG.generateDirective', generator: directiveGenerate },
+        {name: 'angFG.generateComponent', generator: generateComponent},
+        {name: 'angFG.generateModule', generator: moduleGenerate},
+        {name: 'angFG.generateService', generator: serviceGenerate},
+        {name: 'angFG.generateDirective', generator: directiveGenerate},
     ];
 
     generators.forEach(generator => {

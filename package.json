@@ -3,7 +3,7 @@
     "displayName": "Angular File Generator",
     "description": "Angular file generator for project Program engineering",
     "repository": "https://github.com/ChocolateHacker/angular-file-generator",
-    "version": "0.1.1",
+    "version": "1.0.0",
     "engines": {
         "vscode": "^1.96.0"
     },
